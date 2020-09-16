@@ -27,4 +27,4 @@ before_install:
   - docker buildx inspect --bootstrap
 
 script:
-  - docker buildx build --push --platform linux/arm64 -t ${ORG}/new-istio-proxyv2:${ISTIO_VERSION} -f Dockerfile.proxyv2 .
+  - docker buildx build --push --platform linux/amd64 -t ${ORG}/new-istio-proxyv2:${ISTIO_VERSION} -f Dockerfile.proxyv2 .
