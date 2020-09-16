@@ -2,9 +2,10 @@ dist: bionic
 
 env:
   global:
-#    - IMAGE_NAME=pkskubeflow/tensorboard-controller
-    - CODE_TAG=1.5.10
-    - BUILD_WITH_CONTAINER=1
+    - ORG=pkskubeflow
+#    - IMAGE_NAME=pkskubeflow/is-controller
+    - ISTIO_VERSION=1.7.1
+#    - BUILD_WITH_CONTAINER=1
   
 services:
   - docker
@@ -20,13 +21,10 @@ before_install:
   - mv buildx-v0.4.2.linux-${TRAVIS_CPU_ARCH} ~/.docker/cli-plugins/docker-buildx
   - docker version
   - docker buildx version
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PWD}  
   - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   - docker buildx create --use
   - docker buildx inspect --bootstrap
-  - git clone -b ${CODE_TAG} --depth 1 https://github.com/istio/istio.git
 
 script:
-  - cd istio
-#  - docker login -u ${DOCKER_USER} -p ${DOCKER_PWD}
-  - make
-#  - docker buildx build --push --platform linux/amd64,linux/arm64 -t ${IMAGE_NAME} -f tensorboard-controller/Dockerfile .
+  - docker buildx build --push --platform linux/amd64,linux/arm64 -t ${ORG}/istio-proxyv2:${ISTIO_VERSION} -f Dockerfile.proxyv2 .
