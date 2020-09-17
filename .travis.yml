@@ -30,7 +30,8 @@ before_install:
 
 script:
 #  - if [ "${TRAVIS_CPU_ARCH}" = "amd64" ]; then export PLATS=linux/amd64; else export PLATS=linux/arm64; fi
-  - echo PLATS=linux/amd64,linux/arm64
+  - export PLATS=linux/amd64,linux/arm64
+  - echo ${PLATS}
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-proxyv2:${ISTIO_VERSION} -f Dockerfile.proxyv2 .
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-pilot:${ISTIO_VERSION} -f Dockerfile.pilot .
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-operator:${ISTIO_VERSION} -f Dockerfile.operator .
