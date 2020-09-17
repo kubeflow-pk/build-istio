@@ -4,9 +4,10 @@ env:
   global:
     - ORG=pkskubeflow
     - ISTIO_VERSION=1.7.1
-arch:
-  - amd64
-  - arm64
+
+#arch:
+#  - amd64
+#  - arm64
   
 services:
   - docker
@@ -28,8 +29,8 @@ before_install:
   - docker buildx inspect --bootstrap
 
 script:
-  - if [ "${TRAVIS_CPU_ARCH}" = "amd64" ]; then export PLATS=linux/amd64; else export PLATS=linux/arm64; fi
-  - echo ${PLATS}
+#  - if [ "${TRAVIS_CPU_ARCH}" = "amd64" ]; then export PLATS=linux/amd64; else export PLATS=linux/arm64; fi
+  - echo PLATS=linux/amd64,linux/arm64
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-proxyv2:${ISTIO_VERSION} -f Dockerfile.proxyv2 .
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-pilot:${ISTIO_VERSION} -f Dockerfile.pilot .
   - docker buildx build --push --platform ${PLATS} -t ${ORG}/new-istio-operator:${ISTIO_VERSION} -f Dockerfile.operator .
